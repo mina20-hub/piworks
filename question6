@@ -1,0 +1,13 @@
+import pandas as pd
+
+df = pd.read_csv("https://www.piworks.net/Upload/Document/Original/country_vaccination_stats.csv")
+
+df['daily_vaccinations'].fillna(0, inplace=True)
+
+df['daily_vaccinations'] = pd.to_numeric(df['daily_vaccinations'], errors='coerce')
+
+grouped = df.groupby('country')
+
+median_vaccinations = grouped['daily_vaccinations'].median()
+
+top_countries = median_vaccinations.sort_values(ascending=False).head(3)
