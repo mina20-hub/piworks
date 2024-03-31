@@ -1,0 +1,11 @@
+import pandas as pd
+
+df = pd.read_csv("https://www.piworks.net/Upload/Document/Original/country_vaccination_stats.csv")
+min_vaccinations = df.groupby('country')['daily_vaccinations'].min()
+for country, min_value in min_vaccinations.items():
+    if pd.isnull(min_value): 
+        min_value = 0 
+    df.loc[(df['country'] == country) & (df['daily_vaccinations'].isnull()), 'daily_vaccinations'] = min_value
+df.to_csv("updated_country_vaccination_stats.csv", index=False)
+
+print("updated_country_vaccination_stats.csv")
